@@ -24,6 +24,7 @@ default: &default
 development:
   <<: *default
   database: ai_image_maker_api_development
+  port: <%= Rails.application.credentials.config[:db][:port] %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -82,5 +83,7 @@ test:
 production:
   <<: *default
   database: ai_image_maker_api_production
-  username: ai_image_maker_api
-  password: <%= ENV["AI_IMAGE_MAKER_API_DATABASE_PASSWORD"] %>
+  user: postgres
+  port: <%= Rails.application.credentials.config[:db][:port] %>
+  host: <%= Rails.application.credentials.config[:db][:host] %>
+  password: <%= Rails.application.credentials.config[:db][:password] %>
