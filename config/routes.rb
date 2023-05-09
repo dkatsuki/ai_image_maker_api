@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   get '/test', to: 'utility#test'
+  post '/translations/to_english', to: 'translations#to_english'
+  post '/translations/to_japanese', to: 'translations#to_japanese'
 end
