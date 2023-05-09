@@ -5,12 +5,15 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-# Rails.application.config.middleware.insert_before 0, Rack::Cors do
-#   allow do
-#     origins "example.com"
-#
-#     resource "*",
-#       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-#   end
-# end
+# 参考:https://blog.cloud-acct.com/posts/u-rails-rackcors/
+
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    origins *Rails.application.credentials.config[:cors_origins]
+    resource '*',
+      headers: :any,
+      expose: ['access-token', 'uid', 'client'], # 追加
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true
+  end
+end

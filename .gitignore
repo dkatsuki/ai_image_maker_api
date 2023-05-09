@@ -18,6 +18,8 @@
 !/tmp/pids/
 !/tmp/pids/.keep
 
+/vendor/*
+
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
