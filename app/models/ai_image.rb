@@ -1,4 +1,5 @@
 class AiImage < ApplicationRecord
+  @@files_domain = Rails.application.credentials.config[:files_domain]
   attr_reader :tmp_file_path
 
   validates :spell, presence: { message: '画像生成用テキストは必須です。' }
@@ -14,6 +15,15 @@ class AiImage < ApplicationRecord
 
   def self.generater
     @@generater ||= DallE.new
+  end
+
+  def spell=(spell)
+    super(spell)
+    self.write_attribute(:spell_length, spell.length)
+  end
+
+  def spell_length=
+    raise RuntimeError, '"spell_length" will be set by spell= method.'
   end
 
   def new_multiple_records(params)
@@ -52,7 +62,15 @@ class AiImage < ApplicationRecord
 
   def image_key
     @image_key ||= if self.id.present?
-        "ai_images/#{self.id}.#{self.extension}"
+        "ai_images/#{self.id}#{self.extension}"
+      else
+        nil
+      end
+  end
+
+  def image_source
+    @image_source ||= if self.image_key.present?
+        "https://#{@@files_domain}/#{self.image_key}"
       else
         nil
       end

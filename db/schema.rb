@@ -16,6 +16,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_083842) do
 
   create_table "ai_images", force: :cascade do |t|
     t.string "spell", null: false
+    t.integer "spell_length", null: false
     t.integer "width", null: false
     t.integer "height", null: false
     t.string "extension", default: "png", null: false
