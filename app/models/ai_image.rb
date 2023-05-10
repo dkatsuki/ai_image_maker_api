@@ -17,7 +17,7 @@ class AiImage < ApplicationRecord
     @@generater ||= DallE.new
   end
 
-  def self.new_multiple_records(spell: nil, width: 256, height: 256, n: 2)
+  def self.new_multiple(spell: nil, width: 256, height: 256, n: 2)
     self.generater.generate_images(spell, width: width, height: height, n: n).map do |path|
       record = self.new(spell: spell, width: width, height: height)
       record.tmp_file_path = path

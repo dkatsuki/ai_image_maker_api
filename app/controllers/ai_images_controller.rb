@@ -11,7 +11,7 @@ class AiImagesController < ApplicationController
 
   def create_multiple_pattern_image_records
     spell, width, height, n = params[:ai_image].values_at(:spell, :width, :height, :n)
-    ai_images = self.model.new_multiple_records(spell: spell, width: width, height: height, n: n.to_i)
+    ai_images = self.model.new_multiple(spell: spell, width: width, height: height, n: n.to_i)
 
     response_body = []
 
