@@ -16,7 +16,7 @@ class ApplicationController < ActionController::API
   end
 
   def set_model
-    @model = self.class.name.gsub(/Controller$/, '').singularize.constantize
+    @model = self.class.name.gsub(/Controller$/, '').singularize.safe_constantize
   end
 
   def index

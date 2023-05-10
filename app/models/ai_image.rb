@@ -1,6 +1,6 @@
 class AiImage < ApplicationRecord
   @@files_domain = Rails.application.credentials.config[:files_domain]
-  attr_reader :tmp_file_path
+  attr_accessor :tmp_file_path
 
   validates :spell, presence: { message: '画像生成用テキストは必須です。' }
   validates :width, presence: { message: '生成した画像のurlの横幅は必須です。' }
@@ -17,6 +17,14 @@ class AiImage < ApplicationRecord
     @@generater ||= DallE.new
   end
 
+  def self.new_multiple_records(spell: nil, width: 256, height: 256, n: 2)
+    self.generater.generate_images(spell, width: width, height: height, n: n).map do |path|
+      record = self.new(spell: spell, width: width, height: height)
+      record.tmp_file_path = path
+      record
+    end
+  end
+
   def spell=(spell)
     super(spell)
     self.write_attribute(:spell_length, spell.length)
@@ -24,15 +32,6 @@ class AiImage < ApplicationRecord
 
   def spell_length=
     raise RuntimeError, '"spell_length" will be set by spell= method.'
-  end
-
-  def new_multiple_records(params)
-    spell, width, height, n = params.values_at(:spell, :width, :height, :n)
-    self.generater.generate_images(spell, width: width, height: height, n: n).map do |path|
-      record = self.new(spell: spell, width: width, height: height)
-      record.tmp_file_path = path
-      record
-    end
   end
 
   def generated_image?
@@ -77,7 +76,5 @@ class AiImage < ApplicationRecord
   end
 
   private
-    def set_tmp_file_path(path)
-      @tmp_file_path = path
-    end
+
 end
