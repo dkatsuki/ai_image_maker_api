@@ -64,6 +64,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def errors_list
+    return nil unless self.errors.any?
     result = {}
     self.errors.messages.each do |key, value|
       result[self.class.get_japanese_attribute_name(key)] = value
