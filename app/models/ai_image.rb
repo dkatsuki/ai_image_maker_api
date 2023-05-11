@@ -1,7 +1,6 @@
 class AiImage < ApplicationRecord
   @@files_domain = Rails.application.credentials.config[:files_domain]
-  attr_accessor :tmp_file_path
-  attr_reader :generate_image_response
+  attr_accessor :tmp_file_path, :generate_image_response
 
   before_validation :generate_from_spell, if: -> { self.new_record? && !self.generated_image? }
 
@@ -22,9 +21,24 @@ class AiImage < ApplicationRecord
   end
 
   def self.new_multiple(spell: nil, width: 256, height: 256, n: 2)
-    self.generater.generate_images(spell, width: width, height: height, n: n).map do |response|
+    response = self.generater.generate_images(
+      spell,
+      width: width,
+      height: height,
+      n: n,
+      response_format: 'b64_json'
+    )
+
+    if response.error?
       record = self.new(spell: spell, width: width, height: height)
-      record.tmp_file_path = path
+      record.generate_image_response = response
+      return [record]
+    end
+
+    response.data.map do |patn|
+      record = self.new(spell: spell, width: width, height: height)
+      record.tmp_file_path = image_path
+      record.extension = File.extname(image_path)
       record
     end
   end
