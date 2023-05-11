@@ -1,12 +1,8 @@
 class AiImagesController < ApplicationController
 
   def create
-    ai_image = AiImage.new(strong_parameters)
-    if ai_image.save
-      render json: {body: ai_image.to_json_with(params[:to_json_option])}
-    else
-      render json: {body: ai_image.errors.full_messages}
-    end
+    ai_image = AiImage.create(strong_parameters)
+    render json: {body: ai_image.to_json_with(params[:to_json_option])}
   end
 
   def create_multiple_pattern_image_records

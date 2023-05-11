@@ -51,7 +51,23 @@ class ApplicationRecord < ActiveRecord::Base
   def to_json_with(option = nil)
     option = self.class.to_correct_json_format(option)
     option[:include] = self.class.to_safty_include_option(option[:include]) if option&.[](:include).present?
+
+    if option[:methods].blank?
+      option[:methods] = 'errors_list'
+    elsif option[:methods].is_a?(Array)
+      option[:methods] << 'errors_list'
+    else # option[:methods].is_a?(String)
+      option[:methods] = [option[:methods], 'errors_list']
+    end
+
     JSON.parse(self.to_json(option))
   end
 
+  def errors_list
+    result = {}
+    self.errors.messages.each do |key, value|
+      result[self.class.get_japanese_attribute_name(key)] = value
+    end
+    result
+  end
 end
