@@ -35,8 +35,9 @@ class AiImage < ApplicationRecord
       return [record]
     end
 
-    response.data.map do |patn|
+    response.data.map do |image_path|
       record = self.new(spell: spell, width: width, height: height)
+      record.generate_image_response = response
       record.tmp_file_path = image_path
       record.extension = File.extname(image_path)
       record

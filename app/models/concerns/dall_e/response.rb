@@ -75,7 +75,7 @@ module DallE
           end
         elsif @response_format == 'b64_json'
           raw_response['data'].map do |data|
-            base64_string = raw_response.dig('data', 0, response_format)
+            base64_string = data['b64_json']
             binary = Base64.decode64(base64_string)
             path = write_image(binary)
             path
