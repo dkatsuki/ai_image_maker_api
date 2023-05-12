@@ -86,3 +86,4 @@ production:
   database: ai_image_maker_api_production
   port: <%= Rails.application.credentials.config[:db][:port] %>
   host: <%= Rails.application.credentials.config[:db][:host] %>
+  password: <%= Rails.application.credentials.config[:db][:password] %>
