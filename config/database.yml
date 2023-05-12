@@ -80,10 +80,9 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+
 production:
   <<: *default
   database: ai_image_maker_api_production
-  user: postgres
   port: <%= Rails.application.credentials.config[:db][:port] %>
   host: <%= Rails.application.credentials.config[:db][:host] %>
-  password: <%= Rails.application.credentials.config[:db][:password] %>
